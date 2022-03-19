@@ -22,7 +22,19 @@ function getMessages() {
     })
 }
 
+function updateMessage(id, message) {
+    return new Promise(async (resolve, reject) => {
+        if (!id || !message) {
+            console.log("{messageController} There is no id or message");
+            return reject("Invalid parameters");
+        };
+        const result = await store.update(id, message);
+        resolve(result);
+    })
+}
+
 module.exports = {
     addMessage,
-    getMessages
+    getMessages,
+    updateMessage
 };

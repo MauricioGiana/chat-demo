@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
         })
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", (req, res) => {
     const { user, message } = req.body;
     controller.addMessage(user, message)
         .then(fullMessage => {
@@ -23,6 +23,18 @@ router.post("/", (req, res, next) => {
             response.error(req, res, "Incorrect parameters", 400, err);
         });
 });
+
+router.patch("/:id", (req, res) => {
+    const { id } = req.params;
+    const { message } = req.body;
+    controller.updateMessage(id, message)
+        .then(updatedMessage => {
+            response.success(req, res, updatedMessage);
+        })
+        .catch(err => {
+            response.error(req, res, "Incorrect parameters", 400, err);
+        });
+})
 
 router.delete("/", (req, res) => {
     res.send("Hello World");

@@ -14,11 +14,18 @@ function addMessage(message) {
 };
 
 async function getMessages() {
-   const messages = await Message.find();
-    return messages; 
+    const messages = await Message.find();
+    return messages;
+}
+
+async function updateMessage(id, message) {
+    const result = await Message.findByIdAndUpdate(id, { message });
+    const updatedMessage = await Message.findById(id);
+    return updatedMessage;
 }
 
 module.exports = {
     add: addMessage,
-    list: getMessages
+    list: getMessages,
+    update: updateMessage
 };
