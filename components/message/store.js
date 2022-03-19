@@ -1,31 +1,39 @@
-const Message = require("./model");
-const db = require("mongoose");
-const config = require("../../config");
-const MONGO_URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`;
 const Model = require("./model");
 
-db.promise = global.promise;
-db.connect(MONGO_URI, { useNewUrlParser: true });
-console.log("MongoDB connected");
-
 function addMessage(message) {
-    const newMessage = new Message(message);
+    const newMessage = new Model(message);
     return newMessage.save();
 };
 
-async function getMessages() {
-    const messages = await Message.find();
-    return messages;
+function getMessages(filterUser) {
+    return new Promise((resolve, reject) => {
+        const filter = filterUser ? { user: filterUser } : {};
+        const messages = Model.find(filter)
+            .populate('user')
+            .exec((err, populated) => {
+                if (err) {
+                    return reject(err);
+                } else {
+                    resolve(populated);
+                }
+            });
+    })
 }
 
 async function updateMessage(id, message) {
-    const result = await Message.findByIdAndUpdate(id, { message });
-    const updatedMessage = await Message.findById(id);
+    const result = await Model.findByIdAndUpdate(id, { message });
+    const updatedMessage = await Model.findById(id);
     return updatedMessage;
+}
+
+async function deleteMessage(id) {
+    const result = await Model.findByIdAndRemove(id);
+    return result;
 }
 
 module.exports = {
     add: addMessage,
     list: getMessages,
-    update: updateMessage
+    update: updateMessage,
+    delete: deleteMessage
 };

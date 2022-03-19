@@ -4,10 +4,20 @@ const response = require('../../network/response');
 const controller = require('./controller');
 
 router.get("/", (req, res) => {
-    const filterMessages = req.query.user || null;
-    controller.getMessages(filterMessages)
-        .then(messagesList => {
-            response.success(req, res, messagesList);
+    controller.getUsers()
+        .then(users => {
+            response.success(req, res, users);
+        })
+        .catch(err => {
+            response.error(req, res, "Unexpected Error", 500, err);
+        })
+});
+
+router.get("/:id", (req, res) => {
+    const {id} = req.params;
+    controller.getUsers(id)
+        .then(user => {
+            response.success(req, res, user);
         })
         .catch(err => {
             response.error(req, res, "Unexpected Error", 500, err);
@@ -15,13 +25,13 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    const { user, message } = req.body;
-    controller.addMessage(user, message)
-        .then(fullMessage => {
-            response.success(req, res, fullMessage, 201);
+    const { name } = req.body;
+    controller.addUser(name)
+        .then(newUser => {
+            response.success(req, res, newUser, 201);
         })
         .catch(err => {
-            response.error(req, res, "Incorrect parameters", 400, err);
+            response.error(req, res, "Internal error", 500, err);
         });
 });
 

@@ -1,24 +1,22 @@
 const store = require('./store');
 
-function addMessage(user, message) {
+function addUser(name) {
     return new Promise((resolve, reject) => {
-        if (!user || !message) {
-            console.log("{messageController} There is no user or message");
+        if (!name) {
+            console.log("{messageController} There is no user name");
             return reject("Invalid parameters");
         };
-        const fullMessage = {
-            user,
-            message,
-            date: new Date()
+        const newUser = {
+            name
         }
-        store.add(fullMessage);
-        resolve(fullMessage);
+        store.add(newUser);
+        resolve(newUser);
     })
 };
 
-function getMessages(filterUser) {
+function getUsers(id) {
     return new Promise((resolve, reject) => {
-        resolve(store.list(filterUser));
+        resolve(store.list(id));
     })
 }
 
@@ -45,8 +43,8 @@ function deleteMessage(id) {
 }
 
 module.exports = {
-    addMessage,
-    getMessages,
+    addUser,
+    getUsers,
     updateMessage,
     deleteMessage
 };

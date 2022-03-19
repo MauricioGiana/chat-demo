@@ -1,5 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const config = require("./config");
+const MONGO_URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`;
+
+const db = require("./db");
+
+db(MONGO_URI);
 
 const app = express();
 app.use(bodyParser.json());
