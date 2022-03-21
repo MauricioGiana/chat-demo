@@ -1,14 +1,15 @@
 const store = require('./store');
 
-function addMessage(user, message) {
+function addMessage(user, message, chat, file) {
     return new Promise((resolve, reject) => {
-        if (!user || !message) {
-            console.log("{messageController} There is no user or message");
+        if (!user || !message || !chat) {
+            console.log("{messageController} There is no user, message or chat");
             return reject("Invalid parameters");
         };
         const fullMessage = {
             user,
             message,
+            chat,
             date: new Date()
         }
         store.add(fullMessage);

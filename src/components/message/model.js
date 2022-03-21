@@ -6,9 +6,12 @@ const messageSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    chat: {
+        type: Schema.Types.ObjectId,
+        ref: 'Chat',
+    },
     message: {
         type: String,
-        required: true
     },
     date: {
         type: Date,
